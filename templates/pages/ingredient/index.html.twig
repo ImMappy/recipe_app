@@ -1,0 +1,48 @@
+{% extends "./base.html.twig" %}
+
+{% block title %}Ingrédients{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Mes ingrédients</h1>
+    {% for flash in app.flashes('success') %}
+        <div class="alert alert-dismissible alert-success mt-4">
+            {{ flash }}
+        </div>
+    {% endfor %}
+    {% if not ingredients.items is same as ([]) %}
+        <small class="h4">
+            Nombre d'ingrédients : {{ ingredients.getTotalItemCount }}
+        </small>
+        <a href="{{ path('ingredient.new') }}" class="btn btn-primary">Créer un ingrédient</a>
+        <div class="mt-4">  
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prix</th>
+                        <th>Date d'ajout</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ingredient in ingredients %}
+                    <tr>
+                        <td>{{ ingredient.name }}</td>
+                        <td>{{ ingredient.price }}</td>
+                        <td>{{ ingredient.createdAt|date("d/m/Y")  }}</td>
+                        <td><a href="{{ path('ingredient.edit',{id : ingredient.id}) }}" class="btn btn-warning">Modifier</a></td>
+                        <td><a href="{{ path('ingredient.delete', {id : ingredient.id})}}" class="btn btn-danger">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="navigation d-flex justify-content-center">
+            {{ knp_pagination_render(ingredients) }}
+        </div>
+    {% else %}
+    <span>Il n'y a pas d'ingrédients.</span>
+    {% endif %}
+</div>
+
+{% endblock %}
